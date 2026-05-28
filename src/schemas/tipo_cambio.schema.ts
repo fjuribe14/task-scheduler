@@ -1,10 +1,18 @@
-import { int, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+  datetime2,
+  float,
+  int,
+  mssqlTable,
+  nvarchar,
+} from "drizzle-orm/mssql-core";
 
-export const tipoCambioSchema = sqliteTable("tipo_cambio", {
-  id: int().primaryKey({ autoIncrement: true }),
-  moneda: text({ length: 3 }).notNull(),
-  valor: real().notNull(),
-  fecha: text().notNull(),
-  fecha_creacion: text().default(new Date().toISOString()).notNull(),
-  fecha_actualizacion: text().default(new Date().toISOString()).notNull(),
+export const tipoCambioSchema = mssqlTable("tipo_cambio", {
+  id: int("id").identity().primaryKey(),
+  moneda: nvarchar("moneda", { length: 5 }).notNull(),
+  valor: float("valor").notNull(),
+  fecha_valor: datetime2("fecha_valor").notNull(),
+  fecha_registro: datetime2("fecha_registro").default(new Date()).notNull(),
+  fecha_modificacion: datetime2("fecha_modificacion")
+    .default(new Date())
+    .notNull(),
 });

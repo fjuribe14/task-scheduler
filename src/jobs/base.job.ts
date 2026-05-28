@@ -21,7 +21,7 @@ export class Job {
     new CronJob(
       this.cronExpression,
       () => {
-        logger.info(`[${this.name}] started 🚚`);
+        logger.info(`[${this.name}] started 🚀`);
         this.handler()
           .then(() => {
             logger.info(`[${this.name}] completed ✅`);
