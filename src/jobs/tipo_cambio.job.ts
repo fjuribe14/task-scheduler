@@ -1,4 +1,5 @@
 import { Job } from "#/jobs/base.job.js";
+import TipoCambioService from "#/services/tipo_cambio.service.js";
 
 export class TipoCambioJob extends Job {
   constructor() {
@@ -6,7 +7,8 @@ export class TipoCambioJob extends Job {
       name: "TipoCambioJob",
       cronExpression: "*/10 * * * * *",
       handler: async () => {
-        throw new Error("Error al obtener el tipo de cambio");
+        await TipoCambioService.findTipoCambioBcv();
+        // await TipoCambioService.findTipoCambioPromedio();
       },
     });
   }
