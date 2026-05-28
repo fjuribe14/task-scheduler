@@ -1,6 +1,6 @@
 import { CronJob } from "cron";
-import { logger } from "@/config/logger";
-import type { TJob } from "@/types/job.types";
+import { logger } from "#/config/logger.js";
+import type { TJob } from "#/types/job.types.js";
 
 export class Job {
   protected name: string;

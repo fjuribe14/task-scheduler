@@ -1,6 +1,6 @@
-import { logger } from "@/config/logger";
-import type { Job } from "@/jobs/base.job";
-import { TipoCambioJob } from "@/jobs/tipo_cambio.job";
+import { logger } from "#/config/logger.js";
+import type { Job } from "#/jobs/base.job.js";
+import { TipoCambioJob } from "#/jobs/tipo_cambio.job.js";
 
 const jobs: Job[] = [new TipoCambioJob(), new TipoCambioJob()];
 

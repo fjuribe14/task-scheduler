@@ -5,7 +5,7 @@
     "moduleResolution": "NodeNext",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "#/*.js": ["./src/*.ts", "./src/*.js"]
     },
     "ignoreDeprecations": "6.0",
     "outDir": "./dist",

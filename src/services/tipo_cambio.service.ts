@@ -1,5 +1,5 @@
-import { db } from "@/config/database";
-import { tipoCambioSchema } from "@/schemas/tipo_cambio.schema";
+import { db } from "#/config/database.js";
+import { tipoCambioSchema } from "#/schemas/tipo_cambio.schema.js";
 
 export class TipoCambioService {
   async save(data: typeof tipoCambioSchema.$inferInsert) {

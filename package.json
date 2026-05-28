@@ -21,7 +21,11 @@
   },
   "license": "MIT",
   "main": "dist/index.js",
-  "packageManager": "pnpm@10.27.0",
+  "type": "module",
+  "imports": {
+    "#/*.js": "./dist/*.js"
+  },
+  "packageManager": "pnpm@11.4.0",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "pnpm run format && pnpm run lint && tsc",
@@ -31,7 +35,16 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "pm2:start": "pm2 start dist/index.js --name task-scheduler",
+    "pm2:dev": "pm2 start dist/index.js --name task-scheduler --watch",
+    "pm2:stop": "pm2 stop task-scheduler",
+    "pm2:restart": "pm2 restart task-scheduler",
+    "pm2:delete": "pm2 delete task-scheduler",
+    "pm2:list": "pm2 list",
+    "pm2:logs": "pm2 logs task-scheduler",
+    "pm2:save": "pm2 save",
+    "pm2:startup": "pm2 startup"
   },
   "dependencies": {
     "@libsql/client": "^0.17.3",
