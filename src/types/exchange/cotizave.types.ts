@@ -17,23 +17,36 @@ export type TCotizaVeRatesResponseRate = {
   bid?: number;
 };
 
-const cotizaVeRatesResponseMarketEnum = [
+export const cotizaVeRatesResponseMarketEnum = [
   "reference",
   "eur_reference",
   "parallel",
   "binance",
 ] as const;
 
-const cotizaVeRatesResponseTypeEnum = ["p2p", "reference", "parallel"] as const;
+export const cotizaVeRatesResponseTypeEnum = [
+  "p2p",
+  "reference",
+  "parallel",
+] as const;
+
+export const cotizaVeEndpointEnum = ["/rates"] as const;
+
+export type TCotizaVeEndpoint = (typeof cotizaVeEndpointEnum)[number];
 
 export type TCotizaVeRatesResponseMarket =
   (typeof cotizaVeRatesResponseMarketEnum)[number];
+
 export type TCotizaVeRatesResponseType =
   (typeof cotizaVeRatesResponseTypeEnum)[number];
 
 export const cotizaVeRatesResponseMarketEnumObject = getEnumObjectFromArray(
   cotizaVeRatesResponseMarketEnum,
 );
+
 export const cotizaVeRatesResponseTypeEnumObject = getEnumObjectFromArray(
   cotizaVeRatesResponseTypeEnum,
 );
+
+export const cotizaVeEndpointEnumObject =
+  getEnumObjectFromArray(cotizaVeEndpointEnum);

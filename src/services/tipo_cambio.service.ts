@@ -1,7 +1,7 @@
 import "dotenv/config";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "#/config/database.js";
-import { tipoCambioSchema } from "#/schemas/sqlite/tipo_cambio.schema.js";
+import { tipoCambioSchema } from "#/schemas/mssql/tipo_cambio.schema.js";
 import type { TTipoCambioSchema } from "#/types/tipo_cambio.types.js";
 
 class TipoCambioService {
@@ -28,13 +28,18 @@ class TipoCambioService {
       throw Error(`[TipoCambioService] Data is empty ❌`);
     }
 
+    const monedas: string[] = data.map((item) => item.moneda);
+    const values: number[] = data.map((item) => item.valor);
+    const fechaValor = data[0].fecha_valor;
+
     return await this.database
       .select()
       .from(tipoCambioSchema)
       .where(
         and(
-          eq(tipoCambioSchema.moneda, data[0].moneda),
-          eq(tipoCambioSchema.fecha_valor, data[0].fecha_valor),
+          inArray(tipoCambioSchema.valor, values),
+          inArray(tipoCambioSchema.moneda, monedas),
+          eq(tipoCambioSchema.fecha_valor, fechaValor),
         ),
       );
   }

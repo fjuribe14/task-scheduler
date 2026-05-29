@@ -23,17 +23,3 @@ export const cambioCostosOperativosSchema = mssqlTable(
       .notNull(),
   },
 );
-
-// CREATE TABLE qualitasassistance_com_sql.dbo.cambio_costos_operativos (
-// 	id int IDENTITY(1,1) NOT NULL,
-// 	id_pais int NULL,
-// 	fecha_inicio datetime NULL,
-// 	fecha_fin datetime NULL,
-// 	valor_aplicable float NULL,
-// 	id_tipo_moneda int NULL,
-// 	hecho_por varchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-// 	fecha_registro datetime DEFAULT getdate() NULL,
-// 	modificado_por varchar(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-// 	fecha_modificado datetime NULL,
-// 	CONSTRAINT PK__cambio_c__3213E83F1C8E8C4E PRIMARY KEY (id)
-// );

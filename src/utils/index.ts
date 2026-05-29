@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export function getEnumObjectFromArray<
   T extends Readonly<Array<string | number>>,
   U extends T[number],
@@ -9,4 +11,8 @@ export function getEnumObjectFromArray<
       {} as { [K in U]: K },
     ),
   );
+}
+
+export function getCurrentDate(formatString: string = "yyyy-MM-dd"): string {
+  return format(new Date(), formatString);
 }

@@ -32,11 +32,11 @@ if (!dataBaseProvider) {
 switch (dataBaseProvider) {
   case "mssql": {
     try {
-      const pool = await mssql.connect({
-        server: "50.62.180.159",
-        database: "qualitasassistance_com_sql",
-        user: "qa_app",
-        password: "h1Si2%Q80iEr",
+      const mssqlConfig: mssql.config = {
+        server: String(process.env.DATABASE_HOST),
+        database: String(process.env.DATABASE_NAME),
+        user: String(process.env.DATABASE_USER),
+        password: String(process.env.DATABASE_PASSWORD),
         options: {
           encrypt: true,
           trustServerCertificate: true,
@@ -44,7 +44,9 @@ switch (dataBaseProvider) {
             minVersion: "TLSv1",
           },
         },
-      });
+      };
+
+      const pool = await mssql.connect(mssqlConfig);
       db.mssql = drizzleMsSql({ client: pool });
     } catch (error) {
       console.error("Error al conectar a la base de datos:", error);
