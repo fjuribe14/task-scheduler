@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { and, eq } from "drizzle-orm";
 import { db } from "#/config/database.js";
-import { tipoCambioSchema } from "#/schemas/tipo_cambio.schema.js";
+import { tipoCambioSchema } from "#/schemas/sqlite/tipo_cambio.schema.js";
 import type { TTipoCambioSchema } from "#/types/tipo_cambio.types.js";
 
 class TipoCambioService {
