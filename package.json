@@ -29,7 +29,7 @@
   "scripts": {
     "mssql:env": "set NODE_OPTIONS=--tls-cipher-list=DEFAULT@SECLEVEL=0",
     "dev": "tsx watch src/index.ts",
-    "dev:mssql": "pnpm mssql:env && node --tls-min-v1.0 -r tsx/register --watch src/index.ts",
+    "dev:mssql": "pnpm mssql:env && pnpm dev",
     "build": "pnpm run format && pnpm run lint && tsc",
     "start": "pnpm mssql:env && node dist/index.js",
     "format": "biome check --write .",

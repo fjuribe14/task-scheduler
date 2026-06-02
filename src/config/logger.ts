@@ -1,6 +1,6 @@
+import path from "node:path";
 import pino from "pino";
 import { getCurrentDate } from "#/utils/index.js";
-import path from "path";
 
 // const isProduction = process.env.NODE_ENV === "production";
 

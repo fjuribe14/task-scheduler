@@ -1,3 +1,15 @@
+## Solution error SSL Unsupported Protocol
+
+```bash
+# Windows
+$env:NODE_OPTIONS="--tls-cipher-list=DEFAULT@SECLEVEL=0" pnpm dev
+```
+
+```bash
+# Linux/macOS
+set NODE_OPTIONS=--tls-cipher-list=DEFAULT@SECLEVEL=0 pnpm dev
+```
+
 ## Install pm2 as global
 
 ### PM2 v7.x
