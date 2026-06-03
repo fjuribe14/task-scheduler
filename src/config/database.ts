@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { createClient as createClientLibSql } from "@libsql/client";
+import * as Sentry from "@sentry/node";
 import {
   drizzle as drizzleLibSql,
   type LibSQLDatabase,
@@ -50,6 +51,7 @@ switch (dataBaseProvider) {
       db.mssql = drizzleMsSql({ client: pool });
     } catch (error) {
       console.error("Error al conectar a la base de datos:", error);
+      Sentry.captureException(error);
       throw error;
     }
     break;
@@ -61,6 +63,7 @@ switch (dataBaseProvider) {
       db.sqlite = drizzleLibSql({ client });
     } catch (error) {
       console.error("Error al conectar a la base de datos:", error);
+      Sentry.captureException(error);
       throw error;
     }
     break;

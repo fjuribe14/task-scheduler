@@ -9,7 +9,7 @@ import {
   type TCotizaVeRatesResponse,
   type TCotizaVeRatesResponseRate,
 } from "#/types/exchange/cotizave.types.js";
-import { monedaEnumObject } from "#/types/moneda.types.js";
+import { monedaEnumObject, type TMoneda } from "#/types/moneda.types.js";
 import type { TTipoCambioSchema } from "#/types/tipo_cambio.types.js";
 
 class CotizaVeService {
@@ -63,25 +63,37 @@ class CotizaVeService {
     rates: TCotizaVeRatesResponseRate[],
   ): TCambioMonedaSchema[] {
     return rates.map((rate) => ({
+      // TODO: CAMBIAR ESTO POR CONSULTAS A BASE DE DATOS DE LOS PAISES Y MONEDAS, PARA QUE SE ENCUENTREN LOS ID CORRECTOS
       id_pais: 1,
+      id_tipo_moneda: 5,
       valor_moneda: rate.mid,
       valor_moneda_reconversion: rate.bid,
-      fecha_inicio: String(rate.updated_at),
+      fecha_inicio: new Date(
+        format(String(rate.updated_at), "yyyy-MM-dd"),
+      ).toDateString(),
     }));
   }
 
   public castToCambioCostosOperativos(
     rates: TCotizaVeRatesResponseRate[],
   ): TCambioCostosOperativosSchema[] {
-    return rates.map((rate) => ({
+    if (!rates) return [];
+
+    const ratesFiltered = rates.filter(
+      (rate) =>
+        rate?.type?.includes(cotizaVeRatesResponseTypeEnumObject.reference) ||
+        rate?.market?.includes(cotizaVeRatesResponseMarketEnumObject.binance),
+    );
+
+    return ratesFiltered.map((rate) => ({
+      // TODO: CAMBIAR ESTO POR CONSULTAS A BASE DE DATOS DE LOS PAISES Y MONEDAS, PARA QUE SE ENCUENTREN LOS ID CORRECTOS
       id_pais: 1,
       hecho_por: "CRON",
-      id_tipo_moneda: 1,
+      id_tipo_moneda: 5,
       modificado_por: "CRON",
       valor_aplicable: Number(rate.bid),
       fecha_fin: new Date(format(String(rate.updated_at), "yyyy-MM-dd")),
       fecha_inicio: new Date(format(String(rate.updated_at), "yyyy-MM-dd")),
-      fecha_registro: new Date(format(String(rate.updated_at), "yyyy-MM-dd")),
       fecha_modificado: new Date(format(String(rate.updated_at), "yyyy-MM-dd")),
     }));
   }
@@ -91,21 +103,32 @@ class CotizaVeService {
   ): TTipoCambioSchema[] {
     if (!rates) return [];
 
-    return rates
-      .filter((rate) =>
-        rate?.type?.includes(cotizaVeRatesResponseTypeEnumObject.reference),
+    const ratesFiltered = rates.filter(
+      (rate) =>
+        rate?.type?.includes(cotizaVeRatesResponseTypeEnumObject.reference) ||
+        rate?.market?.includes(cotizaVeRatesResponseMarketEnumObject.binance),
+    );
+    return ratesFiltered
+      .filter(
+        (rate) =>
+          rate?.type?.includes(cotizaVeRatesResponseTypeEnumObject.reference) ||
+          rate?.market?.includes(cotizaVeRatesResponseMarketEnumObject.binance),
       )
-      .map((rate) => {
-        const moneda = rate?.market?.includes(
-          cotizaVeRatesResponseMarketEnumObject.eur_reference,
-        )
-          ? monedaEnumObject.EUR
-          : monedaEnumObject.USD;
+      .map(({ market, mid, updated_at }) => {
+        let moneda: TMoneda = monedaEnumObject.USD;
+
+        if (market === cotizaVeRatesResponseMarketEnumObject.eur_reference) {
+          moneda = monedaEnumObject.EUR;
+        }
+
+        if (market === cotizaVeRatesResponseMarketEnumObject.binance) {
+          moneda = monedaEnumObject.USDC;
+        }
 
         return {
           moneda,
-          valor: rate?.mid,
-          fecha_valor: new Date(format(String(rate?.updated_at), "yyyy-MM-dd")),
+          valor: mid,
+          fecha_valor: new Date(format(String(updated_at), "yyyy-MM-dd")),
         };
       });
   }

@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { and, eq, inArray } from "drizzle-orm";
 import { db } from "#/config/database.js";
 import { logger } from "#/config/logger.js";
@@ -105,9 +104,7 @@ class TipoCambioService {
 
   async createOrUpdate(data: TTipoCambioSchema[]) {
     const existenciaTipoCambio = await this.checkExistenciaTipoCambio(data);
-
     if (existenciaTipoCambio.length) return await this.update(data);
-
     return await this.save(data);
   }
 }

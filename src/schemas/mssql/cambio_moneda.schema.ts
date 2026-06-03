@@ -8,5 +8,5 @@ export const cambioMonedaSchema = sqliteTable("cambio_moneda", {
   id: int().primaryKey({ autoIncrement: true }),
   usuario: int(),
   valor_moneda_reconversion: real(),
-  id_tipo_moneda: int(),
+  id_tipo_moneda: int().notNull(),
 });

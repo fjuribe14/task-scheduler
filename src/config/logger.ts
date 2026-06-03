@@ -1,55 +1,57 @@
 import path from "node:path";
-import pino from "pino";
-import { getCurrentDate } from "#/utils/index.js";
+import winston from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
 
-// const isProduction = process.env.NODE_ENV === "production";
+const logLevel = process.env.LOG_LEVEL || "info";
 
-const transport = pino.transport({
-  level: process.env.LOG_LEVEL || "info",
-  target: "pino-pretty",
-  options: {
-    sync: true,
-    mkdir: true,
-    maxRetries: 3,
-    retryDelay: 50,
-    colorize: true,
-    ignore: "pid,hostname",
-    destination: path.resolve(process.cwd(), "logs", `${getCurrentDate()}.log`),
-  },
-  // targets: [
-  //   {
-  //     target: "pino/file",
-  //     options: {
-  //       destination: `./logs/${getCurrentDate()}.log`,
-  //     },
-  //   },
-  //   {
-  //     target: "pino-pretty",
-  //     options: {
-  //       colorize: true,
-  //       ignore: "pid,hostname",
-  //     },
-  //   },
-  // ],
+// Common formatting for both console and file
+// Must include winston.format.splat() to support printf format strings like %s, %d
+const commonFormat = winston.format.combine(
+  winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss.SSS" }),
+  winston.format.errors({ stack: true }),
+  winston.format.splat(),
+);
+
+// Format for the Console (colored output)
+const consoleFormat = winston.format.combine(
+  winston.format.colorize(),
+  commonFormat,
+  winston.format.printf(({ level, message, timestamp, stack }) => {
+    if (stack) {
+      return `[${timestamp}] ${level}: ${message}\n${stack}`;
+    }
+    return `[${timestamp}] ${level}: ${message}`;
+  }),
+);
+
+// Format for the File (plain text without colors)
+const fileFormat = winston.format.combine(
+  commonFormat,
+  winston.format.printf(({ level, message, timestamp, stack }) => {
+    const cleanLevel = level.toUpperCase().padEnd(5);
+    if (stack) {
+      return `[${timestamp}] ${cleanLevel}: ${message}\n${stack}`;
+    }
+    return `[${timestamp}] ${cleanLevel}: ${message}`;
+  }),
+);
+
+// Daily Rotate File transport setup in the root folder /log
+const dailyRotateFileTransport = new DailyRotateFile({
+  filename: path.join(process.cwd(), "log", "%DATE%.log"),
+  datePattern: "YYYY-MM-DD",
+  zippedArchive: false,
+  maxSize: "20m",
+  maxFiles: "14d",
+  format: fileFormat,
 });
-// {
-//   level: process.env.LOG_LEVEL || "info",
-//   formatters: {
-//     level: (label) => {
-//       return { level: label.toUpperCase() };
-//     },
-//   },
-//   timestamp: pino.stdTimeFunctions.isoTime,
-//   transport: !isProduction
-//     ? {
-//         target: "pino-pretty",
-//         options: {
-//           colorize: true,
-//           ignore: "pid,hostname",
-//         },
-//       }
-//     : undefined,
-// },
-// pino.destination(`./logs/${getCurrentDate()}.log`),
 
-export const logger = pino(transport);
+export const logger = winston.createLogger({
+  level: logLevel,
+  transports: [
+    new winston.transports.Console({
+      format: consoleFormat,
+    }),
+    dailyRotateFileTransport,
+  ],
+});

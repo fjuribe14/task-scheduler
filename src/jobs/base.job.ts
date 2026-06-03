@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node";
 import { CronJob } from "cron";
 import { logger } from "#/config/logger.js";
 import type { TJob } from "#/types/job.types.js";
@@ -27,6 +28,7 @@ export class Job {
             logger.info(`[${this.name}] completed ✅`);
           })
           .catch((error) => {
+            Sentry.captureException(error);
             logger.error(`[${this.name}] failed ❌`, error);
           });
       },

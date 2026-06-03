@@ -12,7 +12,7 @@ export const cambioCostosOperativosSchema = mssqlTable(
     id: int().identity().primaryKey(),
     id_pais: int().notNull(),
     fecha_inicio: datetime2("fecha_inicio").notNull(),
-    fecha_fin: datetime2("fecha_fin").notNull(),
+    fecha_fin: datetime2("fecha_fin"),
     valor_aplicable: float("valor_aplicable").notNull(),
     id_tipo_moneda: int().notNull(),
     hecho_por: nvarchar("hecho_por", { length: 20 }).notNull(),

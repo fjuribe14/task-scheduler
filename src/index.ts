@@ -1,8 +1,7 @@
+import "#/config/sentry.js";
 import { logger } from "#/config/logger.js";
 import type { Job } from "#/jobs/base.job.js";
 import ExchangeRatesJob from "#/jobs/exchange/exchange_rates.job.js";
-
-// import { TipoCambioJob } from "#/jobs/tipo_cambio.job.js";
 
 const jobs: Job[] = [new ExchangeRatesJob()];
 

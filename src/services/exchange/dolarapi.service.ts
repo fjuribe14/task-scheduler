@@ -66,12 +66,15 @@ class DolarAPIService {
     if (!rates) return [];
 
     return rates.map((rate) => {
+      // TODO: CAMBIAR ESTO POR CONSULTAS A BASE DE DATOS DE LOS PAISES Y MONEDAS, PARA QUE SE ENCUENTREN LOS ID CORRECTOS
       return {
-        id_pais: 0,
-        fecha_fin: null,
+        id_pais: 1,
+        id_tipo_moneda: 5,
         moneda: rate.moneda,
         valor_moneda: rate.promedio,
-        fecha_inicio: format(rate.fechaActualizacion, "yyyy-MM-dd"),
+        fecha_inicio: new Date(
+          format(String(rate.fechaActualizacion), "yyyy-MM-dd"),
+        ).toDateString(),
       };
     });
   }
@@ -96,13 +99,13 @@ class DolarAPIService {
     if (!rates) return [];
 
     return rates.map((rate) => {
+      // TODO: CAMBIAR ESTO POR CONSULTAS A BASE DE DATOS DE LOS PAISES Y MONEDAS, PARA QUE SE ENCUENTREN LOS ID CORRECTOS
       return {
         id_pais: 0,
         id_tipo_moneda: 1,
         hecho_por: "CRON",
         moneda: rate.moneda,
         modificado_por: "CRON",
-        fecha_registro: new Date(),
         fecha_modificado: new Date(),
         valor_aplicable: rate.promedio,
         fecha_fin: new Date(format(rate.fechaActualizacion, "yyyy-MM-dd")),
