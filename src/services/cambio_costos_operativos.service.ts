@@ -37,6 +37,9 @@ class CambioCostosOperativosService {
   private castToCambioCostosOperativos(
     tipoCambio: TTipoCambioSchema[],
   ): TCambioCostosOperativosSchema {
+    // biome-ignore lint/style/noNonNullAssertion: False positive
+    const fecha_registro = tipoCambio[0].fecha_registro!;
+
     return {
       id_pais: 1,
       hecho_por: "CRON",
@@ -44,7 +47,7 @@ class CambioCostosOperativosService {
       modificado_por: "CRON",
       fecha_modificado: new Date(),
       valor_aplicable: Number(this.calculateAveragePrice(tipoCambio)),
-      fecha_inicio: new Date(format(new Date(), "yyyy-MM-dd")),
+      fecha_inicio: new Date(format(fecha_registro, "yyyy-MM-dd")),
     };
   }
 
@@ -78,6 +81,7 @@ class CambioCostosOperativosService {
       .insert(cambioCostosOperativosSchema)
       .values(dataToInsert);
   }
+
   private async update(
     dataToInsert: TCambioCostosOperativosSchema,
   ): Promise<unknown> {
